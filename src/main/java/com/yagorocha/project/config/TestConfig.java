@@ -1,15 +1,9 @@
 package com.yagorocha.project.config;
 
 
-import com.yagorocha.project.entities.Category;
-import com.yagorocha.project.entities.Order;
-import com.yagorocha.project.entities.Product;
-import com.yagorocha.project.entities.User;
+import com.yagorocha.project.entities.*;
 import com.yagorocha.project.entities.enums.OrderStatus;
-import com.yagorocha.project.repositories.CategoryRepository;
-import com.yagorocha.project.repositories.OrderRepository;
-import com.yagorocha.project.repositories.ProductRepository;
-import com.yagorocha.project.repositories.UserRepository;
+import com.yagorocha.project.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -33,6 +27,9 @@ public class TestConfig  implements CommandLineRunner {
 
     @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private OrderItemRepository orderItemRepository;
 
 
     @Override
@@ -79,5 +76,19 @@ public class TestConfig  implements CommandLineRunner {
 
         userRepository.saveAll(Arrays.asList(u1, u2));
         orderRepository.saveAll(Arrays.asList(O1, O2,  O3));
+
+
+        OrderItem oi1 = new OrderItem(O1, p1, 2, p1.getPrice());
+        OrderItem oi2 = new OrderItem(O2, p3, 1, p3.getPrice());
+        OrderItem oi3 = new OrderItem(O3, p3, 2, p3.getPrice());
+        OrderItem oi4 = new OrderItem(O3, p5, 2, p5.getPrice());
+
+        orderItemRepository.saveAll(Arrays.asList(oi1, oi2, oi3, oi4));
+
+
+
+
     }
+
+
 }
