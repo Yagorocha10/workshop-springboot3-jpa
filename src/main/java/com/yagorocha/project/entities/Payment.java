@@ -1,5 +1,6 @@
 package com.yagorocha.project.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.io.Serializable;
@@ -17,7 +18,7 @@ public class Payment implements Serializable {
     private Long Id;
     private Instant moment;
 
-
+    @JsonIgnore
     @OneToOne
     @MapsId
     @JoinColumn(name = "order_id")
