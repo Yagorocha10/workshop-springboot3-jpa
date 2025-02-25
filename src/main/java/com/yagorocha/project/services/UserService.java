@@ -2,7 +2,12 @@ package com.yagorocha.project.services;
 
 import com.yagorocha.project.entities.User;
 import com.yagorocha.project.repositories.UserRepository;
+import com.yagorocha.project.services.exceptions.DatabaseException;
+import com.yagorocha.project.services.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -25,7 +30,7 @@ public class UserService {
 
     public User findById(Long id) {
         Optional<User> obj = repository.findById(id);
-        return obj.get();
+        return obj.orElseThrow(() -> new ResourceNotFoundException(id));
     }
 
     public User insert(User obj) {
@@ -33,8 +38,16 @@ public class UserService {
     }
 
     public void delete(Long id) {
-        repository.deleteById(id);
-    }
+        try {
+            repository.deleteById(id);
+        } catch (EmptyResultDataAccessException e) {
+            throw new ResourceNotFoundException(id);
+        } catch (DataIntegrityViolationException e) {
+            throw new DatabaseException(e.getMessage());
+            }
+        }
+
+
 
     public User update(Long id, User obj) {
         User entity = repository.getReferenceById(id);
